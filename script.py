@@ -1,16 +1,10 @@
 #!/usr/bin/env python
 
+#Checks if stdin is valid openchord and output a pretty printed version on stdout
+
 from sys import stdin
 from sys import stdout
 from sys import exit
-
-#display one line of open chord format
-def displayLine(parsed):
-    stdout.write(" |" + parsed['chord']['name'] + "| " + parsed['lyrics'])
-
-    #don't start a new line unless the lyrics ends with a "."
-    if "." in parsed['lyrics'][-1]:
-        print ""
 
 #parse one line of open chord format, stop on any error
 def parse(line):
@@ -49,11 +43,24 @@ def parse(line):
             'lyrics': lyrics
             }
 
+#display one line of open chord format
+def displayLine(parsed):
+    stdout.write(" |" + parsed['chord']['name'] + "| " + parsed['lyrics'])
+
+    #don't start a new line unless the lyrics ends with a "."
+    if "." in parsed['lyrics'][-1]:
+        print ""
+
 def main():
+    #initial newline
+    print ""
+
     #parse and display each line
     for line in stdin:
         parsed = parse(line)
         displayLine(parsed)
-    print ""
+
+    #final newlines
+    print "\n"
 
 main()
