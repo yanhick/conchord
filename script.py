@@ -51,14 +51,44 @@ def displayLine(parsed):
     if "." in parsed['lyrics'][-1]:
         print ""
 
+#display all the chords used in the song
+def displayChords(chords):
+    print "\n"
+    print "Chords used: "
+
+    #display each chord used in the song
+    for chordName, chord in chords.items():
+        displayChord(chord)
+
+#display one chord
+def displayChord(chord):
+
+    #can't display if notes not provided
+    if chord['notes'] is None:
+        return
+
+    print ""
+    print chord['name']
+
+    if chord['notes'] is not None:
+        for char in chord['notes']:
+            print char
+
+
 def main():
     #initial newline
     print ""
+
+    #store each used chords. Key is the chord's name
+    chords = dict()
 
     #parse and display each line
     for line in stdin:
         parsed = parse(line)
         displayLine(parsed)
+        chords[parsed['chord']['name']] = parsed['chord']
+
+    displayChords(chords)
 
     #final newlines
     print "\n"
