@@ -20,25 +20,25 @@ def parse(line):
 
     #check if chord's notes are provided
     if len(data) > 2:
-        notes = data[2].strip()
+        notes = map(lambda note: note if note != "-" else None, list(data[2].strip()))
         if len(notes) != 6:
             exit('Not the right number of strings for the notes: ' + notes)
     else:
         notes = None
 
-    #check if chord's fingering is provided
+    #check if chord's fingerings are provided
     if len(data) > 3:
-        fingering = data[3].strip()
-        if len(fingering) != 6:
-            exit('Not the right number of strings for the fingering: ' + fingering)
+        fingerings = map(lambda fingering: fingering if fingering != "-" else None, list(data[3].strip()))
+        if len(fingerings) != 6:
+            exit('Not the right number of strings for the fingerings: ' + fingerings)
     else:
-        fingering = None
+        fingerings = None
 
     return {
             'chord': {
                 'name': name,
                 'notes': notes,
-                'fingering': fingering
+                'fingerings': fingerings
                 },
             'lyrics': lyrics
             }
@@ -70,10 +70,17 @@ def displayChord(chord):
     print ""
     print chord['name']
 
-    if chord['notes'] is not None:
-        for char in chord['notes']:
-            print char
+    zippedChord = zip(
+            ['e', 'a', 'd', 'g', 'b', 'E'],
+            chord['notes'],
+            chord['fingerings'] if chord['fingerings'] is not None else [None for i in range(6)]
+            )
 
+    for string, note, fingering in zippedChord:
+        line = list("------------------------")
+        if note is not None:
+            line[int(note)] = 'x' if fingering is None else fingering
+        print "".join(line)
 
 def main():
     #initial newline
