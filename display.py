@@ -4,16 +4,12 @@
 
 from sys import stdin
 from sys import stdout
-from sys import exit
 
-#parse one line of open chord format, stop on any error
+#parse one line of open chord format, make sure to lint input first
 def parse(line):
 
     #split on double spaces
     data = line.split("  ")
-
-    if len(data) < 2:
-        exit('Missing chord name or lyrics in: ' + line)
 
     name = data[0].strip()
     lyrics = data[1].strip()
@@ -21,16 +17,12 @@ def parse(line):
     #check if chord's notes are provided
     if len(data) > 2:
         notes = map(lambda note: note if note != "-" else None, list(data[2].strip()))
-        if len(notes) != 6:
-            exit('Not the right number of strings for the notes: ' + notes)
     else:
         notes = None
 
     #check if chord's fingerings are provided
     if len(data) > 3:
         fingerings = map(lambda fingering: fingering if fingering != "-" else None, list(data[3].strip()))
-        if len(fingerings) != 6:
-            exit('Not the right number of strings for the fingerings: ' + fingerings)
     else:
         fingerings = None
 
