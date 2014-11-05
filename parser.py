@@ -47,18 +47,18 @@ def parse(line):
 
 #serialize notes or fingerings structures
 def serializeNotes(notes):
-    return map(lambda note: note if note != None else "-")
+    return ''.join(map(lambda note: note if note != None else "-", notes))
 
 #serialize one line of open chord format. Use as library from other scripts.
 #Returns a tuple containing all the serializations errors in the first element if any
 #and the serialized string in the second
 def serialize(data):
     line = data['chord']['name'] + '  ' + data['lyrics']
-    notes = data['chord']['notes'] if data['chord']['notes'] is not None else None
-    fingerings = data['chord']['fingerings'] if data['chords']['fingerings'] is not None else None
-    if notes is not None: line += serializeNotes(notes)
+    notes = data['chord']['notes']
+    fingerings = data['chord']['fingerings']
+    if notes is not None: line += '  ' + serializeNotes(notes)
 
     #fingerings use same syntax as notes
-    if fingerings is not None: line += serializeNotes(fingerings)
-    return (list(), line)
+    if fingerings is not None: line += '  ' + serializeNotes(fingerings)
+    return (list(), line + '\n')
 
