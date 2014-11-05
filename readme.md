@@ -21,6 +21,13 @@ That’s all folks !
 This format is designed to be easily manipulated using standard Unix tools (cat, grep, awk, less...)
 The following additional tools are provided:
 
+* display.py
+Print a prettier version of a conchord file
+* lint.py
+Check the validity of a conchord file
+* replace-chords.py
+Replace or complete song chords using other conchord files
+
 ##Workflows
 
 

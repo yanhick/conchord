@@ -8,7 +8,7 @@ import argparse
 
 argParser = argparse.ArgumentParser(description='Replace chords from stdin by chords in provided files')
 argParser.add_argument('files', help='the files containing the replacing chords.'
-        'They must be valid open chord files', nargs="+")
+        'They must be valid conchord files', nargs="+")
 args = argParser.parse_args()
 
 filePaths = args.files

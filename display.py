@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 
-#Checks if stdin is valid openchord and output a pretty printed version on stdout
-
 from sys import stdin
 from sys import stdout
 from parser import parse
 import argparse
 
-argParser = argparse.ArgumentParser(description='Output pretty printed version of open chord'
+argParser = argparse.ArgumentParser(description='Output pretty printed version of conchord input'
         'format from stdin Output each line to stdout. Output any error to stderr')
 
-#display one line of open chord format
+#display one line of conchord format
 def displayLine(parsed):
     stdout.write(" |" + parsed['chord']['name'] + "| " + parsed['lyrics'])
 

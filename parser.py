@@ -1,6 +1,6 @@
 #Parse and serialize format, line by line. Use as library from other scripts
 
-#parse one line of open chord format, make sure to lint input first.
+#parse one line of conchord format, make sure to lint input first.
 #Returns a tuple containing all parsing errors in the first element if any and the parsed
 #line in the second
 def parse(line):
@@ -47,7 +47,7 @@ def parse(line):
 def serializeNotes(notes):
     return ''.join(map(lambda note: note if note != None else "-", notes))
 
-#serialize one line of open chord format. Use as library from other scripts.
+#serialize one line of conchord format. Use as library from other scripts.
 #Returns a tuple containing all the serializations errors in the first element if any
 #and the serialized string in the second
 def serialize(data):
