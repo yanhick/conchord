@@ -1,16 +1,14 @@
 #!/usr/bin/env python
 
-#Check validity of stdin until EOF and output to stdout.
-#Exit with 0 and no message if valid
-
 from sys import stdin
 from sys import stdout
 from sys import stderr
 from parser import parse
 import argparse
 
-argParser = argparse.ArgumentParser(description='Lint open chord format. Check validity of stdin')
-argParser.add_argument('--tolerant', help='don\'t exit on error', action="store_true")
+argParser = argparse.ArgumentParser(description='Check valididty of stdin, line by line until EOF'
+            'Output each line to stdout. Output any error to stderr')
+argParser.add_argument('--tolerant', help='if true, don\'t exit on first error', action="store_true")
 args = argParser.parse_args()
 
 #wheter to exit on first error

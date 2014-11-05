@@ -5,6 +5,10 @@
 from sys import stdin
 from sys import stdout
 from parser import parse
+import argparse
+
+argParser = argparse.ArgumentParser(description='Output pretty printed version of open chord'
+        'format from stdin Output each line to stdout. Output any error to stderr')
 
 #display one line of open chord format
 def displayLine(parsed):

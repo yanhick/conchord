@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 #Parse and serialize format, line by line. Use as library from other scripts
 
 #parse one line of open chord format, make sure to lint input first.
