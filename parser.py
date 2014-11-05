@@ -13,7 +13,7 @@ def parse(line):
     data = line.split("  ")
 
     if len(data) < 2:
-        errors.insert(1, 'Missing chord name or lyrics')
+        errors.append((1, 'Missing chord name or lyrics'))
         name = None
         lyrics = None
     else:
@@ -24,7 +24,7 @@ def parse(line):
     if len(data) > 2:
         notes = map(lambda note: note if note != "-" else None, list(data[2].strip()))
         if len(notes) != 6:
-            errors.insert(2, 'Not the right number of strings for the notes')
+            errors.append((2, 'Not the right number of strings for the notes'))
     else:
         notes = None
 
@@ -32,7 +32,7 @@ def parse(line):
     if len(data) > 3:
         fingerings = map(lambda fingering: fingering if fingering != "-" else None, list(data[3].strip()))
         if len(fingerings) != 6:
-            errors.insert(3, 'Not the right number of strings for the fingerings')
+            errors.append((3, 'Not the right number of strings for the fingerings'))
     else:
         fingerings = None
 
