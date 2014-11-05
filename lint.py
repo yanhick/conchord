@@ -1,29 +1,19 @@
 #!/usr/bin/env python
 
-#Check validity of stdin until EOF. Exit with 0 and no message if valid
+#Check validity of stdin until EOF and output to stdout.
+#Exit with 0 and no message if valid
 
 from sys import stdin
-from sys import exit
+from sys import stdout
+from sys import stderr
+from parser import parse
 
-def lint(line):
-    #split on double spaces
-    data = line.split("  ")
-
-    if len(data) < 2:
-        exit('Missing chord name or lyrics in: ' + line)
-
-    #check if chord's notes are provided
-    if len(data) > 2:
-        notes = list(data[2].strip())
-        if len(notes) != 6:
-            exit('Not the right number of strings for the notes: ' + notes)
-
-    #check if chord's fingerings are provided
-    if len(data) > 3:
-        fingerings = list(data[3].strip())
-        if len(fingerings) != 6:
-            exit('Not the right number of strings for the fingerings: ' + fingerings)
+#lint one line, output each error to stderr if any
+def lint(line, idx):
+    (errors, data) = parse(line)
+    map(lambda error: stderr.write(error + ' at line: ' + str(idx) + '\n'), errors)
 
 #lint each line until EOF
-for line in stdin:
-    lint(line)
+for idx, line in enumerate(stdin):
+    lint(line, idx)
+    stdout.write(line)
