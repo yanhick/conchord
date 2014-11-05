@@ -4,36 +4,7 @@
 
 from sys import stdin
 from sys import stdout
-
-#parse one line of open chord format, make sure to lint input first
-def parse(line):
-
-    #split on double spaces
-    data = line.split("  ")
-
-    name = data[0].strip()
-    lyrics = data[1].strip()
-
-    #check if chord's notes are provided
-    if len(data) > 2:
-        notes = map(lambda note: note if note != "-" else None, list(data[2].strip()))
-    else:
-        notes = None
-
-    #check if chord's fingerings are provided
-    if len(data) > 3:
-        fingerings = map(lambda fingering: fingering if fingering != "-" else None, list(data[3].strip()))
-    else:
-        fingerings = None
-
-    return {
-            'chord': {
-                'name': name,
-                'notes': notes,
-                'fingerings': fingerings
-                },
-            'lyrics': lyrics
-            }
+from parser import parse
 
 #display one line of open chord format
 def displayLine(parsed):
@@ -83,7 +54,7 @@ def main():
 
     #parse and display each line
     for line in stdin:
-        parsed = parse(line)
+        (errors, parsed) = parse(line)
         displayLine(parsed)
         chords[parsed['chord']['name']] = parsed['chord']
 
