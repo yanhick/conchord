@@ -1,9 +1,10 @@
 #!/usr/bin/env python
 
-#Replace chords in stdin with one from a provided chord file
+#Replace chords in stdin with one from a provided chord files
 
 from sys import stdin
 from sys import stdout
+from sys import argv
 from parser import parse
 from parser import serialize
 
@@ -18,30 +19,18 @@ def getChords(path):
     chords = dict()
     lines = [line.strip() for line in open(path)]
     for line in lines:
-        chord = getChord(line)
-        chords[chord['name']] = chord
+        (errors, data) = parse(line)
+        chordName = data['chord']['name']
+        chords[chordName] = data['chord']
 
     return chords
 
-def getChord(line):
-    data = line.split('  ')
+def main(filePath):
 
-    name = data[0]
-    notes = data[2]
-    fingerings = data[3] if len(data) == 3 else None
-
-    return {
-            'name': name,
-            'notes': notes,
-            'fingerings': fingerings
-            }
-
-
-def main():
-
-    chords = getChords('chords')
+    chords = getChords(filePath)
     for line in stdin:
         (errors, line) = replaceChord(line, chords)
         stdout.write(line)
 
-main()
+filePath = argv[1]
+main(filePath)
