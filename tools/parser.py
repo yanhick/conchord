@@ -1,3 +1,5 @@
+from functools import partial
+
 #Parse and serialize format, line by line. Use as library from other scripts
 
 #parse one line of conchord format, make sure to lint input first.
@@ -5,58 +7,40 @@
 #line in the second
 def parse(line):
 
-    errors = list()
+    #split on double spaces and clean
+    data = map(lambda item: item.strip() if item.strip() != '-' else None, line.split('  '))
 
-    #split on double spaces
-    data = line.split("  ")
+    default = lambda field, item: (field, item, [])
 
-    if len(data) < 2:
-        errors.append((1, 'Missing chord name or lyrics'))
-        name = None
-        lyrics = None
-    else:
-        name = data[0].strip()
-        lyrics = data[1].strip()
+    parsers = [
+        partial(default, 'label'),
+        partial(default, 'chord-name'),
+        partial(default, 'lyrics'),
+        partial(parseNotesOrFingerings, 'notes', (2, 'Not the right number of strings for the notes')),
+        partial(parseNotesOrFingerings, 'fingerings', (3, 'Not the right number of strings for the fingerings'))
+        ]
 
-    #check if chord's notes are provided
-    if len(data) > 2:
-        notes = map(lambda note: note if note != "-" else None, list(data[2].strip()))
-        if len(notes) != 6:
-            errors.append((2, 'Not the right number of strings for the notes'))
-    else:
-        notes = None
+    return map(lambda (item, parser): parser(item), zip(data, parsers))
 
-    #check if chord's fingerings are provided
-    if len(data) > 3:
-        fingerings = map(lambda fingering: fingering if fingering != "-" else None, list(data[3].strip()))
-        if len(fingerings) != 6:
-            errors.append((3, 'Not the right number of strings for the fingerings'))
-    else:
-        fingerings = None
-
-    return (errors, {
-            'chord': {
-                'name': name,
-                'notes': notes,
-                'fingerings': fingerings
-                },
-            'lyrics': lyrics
-            })
-
-#serialize notes or fingerings structures
-def serializeNotes(notes):
-    return ''.join(map(lambda note: note if note != None else "-", notes))
+def parseNotesOrFingerings(field, errors, items):
+    items = map(lambda item: item if item != '-' else None, list(items))
+    if len(items) != 6:
+        return (field, items, [error])
+    return (field, items, [])
 
 #serialize one line of conchord format. Use as library from other scripts.
 #Returns a tuple containing all the serializations errors in the first element if any
 #and the serialized string in the second
 def serialize(data):
-    line = data['chord']['name'] + '  ' + data['lyrics']
-    notes = data['chord']['notes']
-    fingerings = data['chord']['fingerings']
-    if notes is not None: line += '  ' + serializeNotes(notes)
 
-    #fingerings use same syntax as notes
-    if fingerings is not None: line += '  ' + serializeNotes(fingerings)
-    return (list(), line + '\n')
+    default = lambda el: el if el != None else '-'
+    serializeNotesOrFingerings = lambda item: ''.join(map(default), item)
+    serializers = [
+            default,
+            default,
+            default,
+            serializeNotesOrFingerings,
+            serializeNotesOrFingerings
+            ]
 
+    return '  '.join(map(lambda ((field, item, errors), serializer): serializer(item), zip(data, serializers)))
