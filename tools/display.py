@@ -17,7 +17,7 @@ def displayLine(line):
     if 'chord-name' in line and line['chord-name'] is not None:
         stdout.write(' |' + line['chord-name'] + '| ')
 
-    if 'lyrics' in line:
+    if 'lyrics' in line and line['lyrics'] is not None:
         stdout.write(line['lyrics'])
         #don't start a new line unless the lyrics ends with a '.'
         if '.' in line['lyrics'][-1]:
