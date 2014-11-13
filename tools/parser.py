@@ -8,7 +8,7 @@ from functools import partial
 def parse(line):
 
     #split on tabs and clean
-    data = map(lambda item: item.strip() if item.strip() != '-' else None, line.split('\t'))
+    data = map(lambda item: item.strip() if item.strip() != '' else None, line.split('\t'))
 
     default = lambda item: ([], item)
 
