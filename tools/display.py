@@ -17,7 +17,7 @@ def displayLine(line):
     if 'chord-name' in line and line['chord-name'] is not None:
         stdout.write(' |' + line['chord-name'] + '| ')
 
-    if 'lyrics' in line and line['lyrics'] is not None:
+    if 'lyrics' in line:
         stdout.write(line['lyrics'])
         #don't start a new line unless the lyrics ends with a '.'
         if '.' in line['lyrics'][-1]:
@@ -67,15 +67,12 @@ def main():
 
     #parse and display each line
     for line in stdin:
-        parsed = parse(line)
-        typed = dict()
-        for (field, item, errors) in parsed:
-            typed[field] = item
+        (errors, parsed) = parse(line)
 
-        displayLine(typed)
+        displayLine(parsed)
 
-        if 'chord-name' in typed:
-            chords[typed['chord-name']] = typed
+        if 'chord-name' in parsed:
+            chords[parsed['chord-name']] = parsed
 
     displayChords(chords)
 
