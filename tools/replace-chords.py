@@ -16,9 +16,14 @@ filePaths = args.files
 #repace chord struct in parsed stdin line
 def replaceChord(line, chords):
     (errors, data) = parse(line)
-    chordName = data['chord']['name']
+
+    if 'chord-name' not in data or data['chord-name'] is None:
+        return line
+
+    chordName = data['chord-name']
     if chordName in chords:
-        data['chord'] = chords[chordName]
+        for key, value in chords.items():
+            data[key] = value
 
     (errors, serialized) = serialize(data)
     return serialized
@@ -30,8 +35,12 @@ def getChords(path, chords):
     lines = [line.strip() for line in open(path)]
     for line in lines:
         (errors, data) = parse(line)
-        chordName = data['chord']['name']
-        chords[chordName] = data['chord']
+        if 'chord-name' in data:
+            keys = ['notes', 'fingerings']
+            chord = dict()
+            for key in keys:
+                if key in data and data[key] is not None:
+                    chord[key] = data[key]
 
     return chords
 
