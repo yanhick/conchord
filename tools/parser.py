@@ -34,6 +34,9 @@ def parse(line):
     return (errors, lineAsDict)
 
 def parseNotesOrFingerings(error, items):
+    if items is None:
+        return ([], None)
+
     items = map(lambda item: item if item != '-' else None, list(items))
     if len(items) != 6:
         return ([error], items)
@@ -57,4 +60,7 @@ def serialize(data):
     fields = ['label', 'chord-name', 'lyrics', 'notes', 'fingerings']
     values = map(lambda field: data.get(field, None), fields)
 
-    return '\t'.join(map(lambda (item, serializer): serializer(item), zip(values, serializers)))
+    serialized = '\t'.join(map(lambda (item, serializer): serializer(item), zip(values, serializers)))
+
+    return ([], serialized + '\n')
+
