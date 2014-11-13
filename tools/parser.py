@@ -21,9 +21,7 @@ def parse(line):
         ]
 
     fields = ['label', 'chord-name', 'lyrics', 'notes', 'fingerings']
-    lineAsDict = dict()
-    for field in fields:
-        lineAsDict[field] = None
+    lineAsDict = dict.fromkeys(fields)
 
     errors = []
     for (field, parser, item) in zip(fields, parsers, data):
