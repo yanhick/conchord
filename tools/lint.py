@@ -17,7 +17,7 @@ tolerant = args.tolerant
 #lint one line, output error to stderr if any
 #default to exit on first error but might be set to be tolerant
 def lint(line, idx):
-    errors = reduce(lambda acc, (field, item, errors): acc + errors, parse(line), [])
+    (errors, data) = parse(line)
     for error in errors:
         err = error[1] + ' at line: ' + str(idx) + '\n'
         if not tolerant:
