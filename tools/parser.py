@@ -35,7 +35,7 @@ def parseNotesOrFingerings(error, items):
     if items is None:
         return ([], None)
 
-    items = map(lambda item: item if item != '-' else None, list(items))
+    items = map(lambda item: int(item) if item != '-' else None, list(items))
     if len(items) != 6:
         return ([error], items)
     return ([], items)
