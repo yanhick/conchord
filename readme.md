@@ -1,4 +1,5 @@
 #Conchord
+[![Build Status](https://travis-ci.org/yanhick/conchord.svg?branch=master)](https://travis-ci.org/yanhick/conchord)
 
 A song and lyrics text format and tools for geeky songwriters.
 
