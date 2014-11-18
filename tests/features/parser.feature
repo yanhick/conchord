@@ -20,27 +20,27 @@ Feature: Parsing and serializing conchord format
     Scenario: Parsing errors
 
         Given I parse an empty line
-        Then I should get error <1>
+        Then I should get error 1
 
         Given I parse a line with chords notes without a chord name
-        Then I should get error <2>
+        Then I should get error 2
 
         Given I parse a line with chords fingerings without chords notes
-        Then I should get error <3>
+        Then I should get error 3
 
         Given I parse a line with chord's notes with invalid number of notes
-        Then I should get error <4>
+        Then I should get error 4
 
         Given I parse a line with chord's fingerings with invalid number of notes
-        Then I should get error <5>
+        Then I should get error 5
 
         Given I parse a line with chord's notes with invalid characters
-        Then I should get error <6>
+        Then I should get error 6
 
         Given I parse a line with chord's fingerings with invalid characters
-        Then I should get error <7>
+        Then I should get error 7
 
         Given I parse a line with chord's fingerings not matching the chords notes
-        Then I should get error <8>
+        Then I should get error 8
 
-    Scenario: Serializing
+    #Scenario: Serializing
