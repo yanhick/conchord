@@ -10,35 +10,70 @@ def parse(line):
     #split on tabs and clean
     data = map(lambda item: item.strip() if item.strip() != '' else None, line.split('\t'))
 
-    default = lambda item: ([], item)
-
-    parsers = [
-        default,
-        default,
-        default,
-        partial(parseNotesOrFingerings, (2, 'Not the right number of strings for the notes')),
-        partial(parseNotesOrFingerings, (3, 'Not the right number of strings for the fingerings'))
-        ]
-
+    #field names in order
     fields = ['label', 'chord-name', 'lyrics', 'notes', 'fingerings']
     lineAsDict = dict.fromkeys(fields)
 
-    errors = []
+    identity = lambda item: item
+    parsers = [
+        identity,
+        identity,
+        identity,
+        parseNotesOrFingerings,
+        parseNotesOrFingerings
+        ]
+
     for (field, parser, item) in zip(fields, parsers, data):
-        (parsingErrors, parsed) =  parser(item)
-        errors += parsingErrors
+        parsed =  parser(item)
         lineAsDict[field] = parsed
 
+    errorChecks = [
+        emptyLine,
+        notesWithoutName,
+        fingeringsWithoutNotes,
+        partial(wrongNumberOfChars, 4, 'notes'),
+        partial(wrongNumberOfChars, 5, 'fingerings'),
+        partial(invalidChars, 6, 'notes'),
+        partial(invalidChars, 7, 'fingerings'),
+        mismatchedNotesAndFingerings
+        ]
+
+    errors = filter(None, map(lambda errorChecks: errorChecks(lineAsDict), errorChecks))
     return (errors, lineAsDict)
 
-def parseNotesOrFingerings(error, items):
+def parseNotesOrFingerings(items):
     if items is None:
-        return ([], None)
+        return None
+    notes = map(lambda item: int(item) if item.isdigit() else item, list(items))
+    return map(lambda item: None if item == '-' else item, notes)
 
-    items = map(lambda item: int(item) if item != '-' else None, list(items))
-    if len(items) != 6:
-        return ([error], items)
-    return ([], items)
+def emptyLine(line):
+    error = (1, 'Empty lines are not allowed')
+    return error if filter(lambda key: line[key] is not None, line) == [] else None
+
+def notesWithoutName(line):
+    error = (2, 'Chord notes are provided but the chord name is missing')
+    return error if line['notes'] is not None and line['chord-name'] is None else None
+
+def fingeringsWithoutNotes(line):
+    error = (3, 'Chord fingerings are provided but not the notes')
+    return error if line['fingerings'] is not None and line['notes'] is None else None
+
+def wrongNumberOfChars(errorCode, field, line):
+    error = (errorCode, 'Chord ' + field + ' must have 6 characters')
+    return error if line[field] is not None and len(line[field]) != 6 else None
+
+def invalidChars(errorCode, field, line):
+    error = (errorCode, 'Chord ' + field + ' has invalid character. Authorized characters are numbers or \'-\'')
+    return error if line[field] is not None and filter(lambda item: isinstance(item, int) is False and item is not None, line[field]) != [] else None
+
+def mismatchedNotesAndFingerings(line):
+    if line['notes'] is None or line['fingerings'] is None:
+        return None
+    error = (8, 'The chord\'s fingerings must match the chord\'s notes')
+    return error if filter(lambda (note, fingering): (note is None) != (fingering is None), zip(line['notes'], line['fingerings'])) != [] else None
+
+
 
 #serialize one line of conchord format. Use as library from other scripts.
 #Returns a tuple containing all the serializations errors in the first element if any
