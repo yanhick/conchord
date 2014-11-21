@@ -35,7 +35,8 @@ def parse(line):
         partial(wrongNumberOfChars, 5, 'fingerings'),
         partial(invalidChars, 6, 'notes'),
         partial(invalidChars, 7, 'fingerings'),
-        mismatchedNotesAndFingerings
+        mismatchedNotesAndFingerings,
+        partial(endWithTab, line)
         ]
 
     errors = filter(None, map(lambda errorChecks: errorChecks(lineAsDict), errorChecks))
@@ -73,6 +74,13 @@ def mismatchedNotesAndFingerings(line):
     error = (8, 'The chord\'s fingerings must match the chord\'s notes')
     return error if filter(lambda (note, fingering): (note is None) != (fingering is None), zip(line['notes'], line['fingerings'])) != [] else None
 
+def endWithTab(lineAsString, line):
+    if lineAsString == '':
+        return None
+
+    error = (9, 'The line should not end with a tabulation')
+    return error if lineAsString[-1] == '\t' else None
+
 
 
 #serialize one line of conchord format. Use as library from other scripts.
@@ -93,7 +101,14 @@ def serialize(data):
     fields = ['label', 'chord-name', 'lyrics', 'notes', 'fingerings']
     values = map(lambda field: data.get(field, None), fields)
 
+    #remove all trailing None (which would be converted to tabs)
+    for value in reversed(values):
+        if value is None:
+            values.pop()
+        else:
+            break
+
     serialized = '\t'.join(map(lambda (item, serializer): serializer(item), zip(values, serializers)))
 
-    return ([], serialized + '\n')
+    return ([], serialized)
 

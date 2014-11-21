@@ -43,4 +43,16 @@ Feature: Parsing and serializing conchord format
         Given I parse a line with chord's fingerings not matching the chords notes
         Then I should get error 8
 
-    #Scenario: Serializing
+        Given I parse a line ending with a tab
+        Then I should get error 9
+
+    Scenario: Serializing
+
+        Given I serialize a valid line data structure
+        Then I should get a string representation of it
+
+    Scenario: Parsing and serializing
+
+        Given I parse a valid line
+        When I serialize it
+        Then I should get my initial line
