@@ -1,6 +1,7 @@
 import sys
 from behave import *
 from parser import parse
+from parser import serialize
 
 @given('I parse a valid line with chords and lyrics')
 def step_impl(context):
@@ -143,3 +144,41 @@ def step_impl(context):
 def step_impl(context):
     (errors, parsed) = parse(context.line)
     assert(errors[0][0] == 8)
+
+@given('I parse a line ending with a tab')
+def step_impl(context):
+    context.line = 'label\t'
+
+@then('I should get error 9')
+def step_impl(context):
+    (errors, parsed) = parse(context.line)
+    assert(errors[0][0] == 9)
+
+@given('I serialize a valid line data structure')
+def step_impl(context):
+    context.data = {
+            'lyrics': 'my lyrics',
+            'chord-name': 'A',
+            'notes': None,
+            'fingerings': None,
+            'label': None
+        }
+
+@then('I should get a string representation of it')
+def step_impl(context):
+    line = '\tA\tmy lyrics'
+    print(serialize(context.data))
+    assert(serialize(context.data)) == ([], line)
+
+@given('I parse a valid line')
+def step_impl(context):
+    line = '\tA\tmy lyrics'
+    context.data = parse(line)
+
+@when('I serialize it')
+def step_impl(context):
+    context.line = serialize(context.data[1])
+
+@then('I should get my initial line')
+def step_impl(context):
+    assert(context.line[1] == '\tA\tmy lyrics')
