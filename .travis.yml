@@ -2,5 +2,5 @@ language: python
 python:
     - "2.7"
 install: "pip install behave"
-script: cd tests && PYTHONPATH=../tools/ behave -e semantic
+script: cd tests && PYTHONPATH=../tools/:../lib/ behave -e semantic
 
