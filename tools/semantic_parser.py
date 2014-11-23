@@ -1,5 +1,8 @@
 from parser import parse as parseLine
 
+
+#Parse a whole file of conchord format, extracting semantic such as title from
+#the content and position of files
 def parse(conchordFile):
     lines = map(parseLine, conchordFile.splitlines())
     return ([], {
@@ -10,6 +13,7 @@ def parse(conchordFile):
             'meta': getMeta(lines)
         })
 
+#The song title is the first line of the file if it only contains lyrics
 def getTitle(lines):
     if lines == []:
         return None
@@ -17,6 +21,7 @@ def getTitle(lines):
     firstLine = lines[0][1]
     return firstLine['lyrics'] if hasOnlyField('lyrics', firstLine) else None
 
+#The song artist is the first line of the file if it only contains lyrics
 def getArtist(lines):
     if lines == [] or len(lines) < 2:
         return None
@@ -27,6 +32,8 @@ def getArtist(lines):
     secondLine = lines[1][1]
     return secondLine['lyrics'] if hasOnlyField('lyrics', secondLine) else None
 
+#The song meta are all lines after title and artist which contains only lyrics
+#until the line where the song begins
 def getMeta(lines):
     if lines == [] or len(lines) < 3:
         return []
@@ -49,6 +56,8 @@ def getMeta(lines):
             break
     return meta
 
+#get all the parts of the song(intro, verse, chorus...)
+#A line is considered a song part if it only contains a label
 def getParts(lines):
     parts = []
     for idx, line in enumerate(lines):
@@ -56,6 +65,7 @@ def getParts(lines):
             parts.append((idx, line[1]['label']))
     return parts
 
+#Add the range (begin and end line number) for each part of the song
 def getRangedParts(parts):
     length = len(parts)
     rangedParts = []
@@ -67,6 +77,7 @@ def getRangedParts(parts):
             rangedParts.append((name, (start, start)))
     return rangedParts
 
+#Wether a line has only the specified field at a non-None value
 def hasOnlyField(field, line):
     filteredLine = dict((k, v) for k, v in line.iteritems() if v)
     return filteredLine.keys() == [field]
