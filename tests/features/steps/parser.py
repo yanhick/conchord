@@ -166,13 +166,13 @@ def step_impl(context):
 
 @then('I should get a string representation of it')
 def step_impl(context):
-    line = '\tA\tmy lyrics'
+    line = '\tA\tmy lyrics\n'
     print(serialize(context.data))
     assert(serialize(context.data)) == ([], line)
 
 @given('I parse a valid line')
 def step_impl(context):
-    line = '\tA\tmy lyrics'
+    line = '\tA\tmy lyrics\n'
     context.data = parse(line)
 
 @when('I serialize it')
@@ -181,4 +181,4 @@ def step_impl(context):
 
 @then('I should get my initial line')
 def step_impl(context):
-    assert(context.line[1] == '\tA\tmy lyrics')
+    assert(context.line[1] == '\tA\tmy lyrics\n')
