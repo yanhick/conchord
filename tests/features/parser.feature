@@ -43,7 +43,7 @@ Feature: Parsing and serializing conchord format
         Given I parse a line with chord's fingerings not matching the chords notes
         Then I should get error 8
 
-        Given I parse a line ending with a tab
+        Given I parse a line not ending with a newline
         Then I should get error 9
 
     Scenario: Serializing

@@ -36,7 +36,7 @@ def parse(line):
         partial(invalidChars, 6, 'notes'),
         partial(invalidChars, 7, 'fingerings'),
         mismatchedNotesAndFingerings,
-        partial(endWithTab, line)
+        partial(endWithoutNewline, line)
         ]
 
     errors = filter(None, map(lambda errorChecks: errorChecks(lineAsDict), errorChecks))
@@ -74,12 +74,12 @@ def mismatchedNotesAndFingerings(line):
     error = (8, 'The chord\'s fingerings must match the chord\'s notes')
     return error if filter(lambda (note, fingering): (note is None) != (fingering is None), zip(line['notes'], line['fingerings'])) != [] else None
 
-def endWithTab(lineAsString, line):
+def endWithoutNewline(lineAsString, line):
     if lineAsString == '':
         return None
 
-    error = (9, 'The line should not end with a tabulation')
-    return error if lineAsString[-1] == '\t' else None
+    error = (9, 'The line should end with a newline')
+    return error if lineAsString[-1] != '\n' else None
 
 
 

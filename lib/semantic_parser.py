@@ -4,7 +4,7 @@ from parser import parse as parseLine
 #Parse a whole file of conchord format, extracting semantic such as title from
 #the content and position of files
 def parse(conchordFile):
-    lines = map(parseLine, conchordFile.splitlines())
+    lines = map(lambda line: parseLine(line + '\n'), conchordFile.splitlines())
     return ([], {
             'title': getTitle(lines),
             'artist': getArtist(lines),
