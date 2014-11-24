@@ -49,7 +49,7 @@ def step_impl(context):
 
 @given('I parse a valid conchord file with song part')
 def step_impl(context):
-    context.chdfile = 'My Part'
+    context.chdfile = 'My Part\n'
 
 @Then('I should get a data structure representing the song part')
 def step_impl(context):
@@ -69,7 +69,7 @@ def step_impl(context):
 
 @given('I parse a valid conchord file with additional metadata')
 def step_impl(context):
-    context.chdfile = '\t\tMy title\n\t\tMy artist\n\t\tMy meta'
+    context.chdfile = '\t\tMy title\n\t\tMy artist\n\t\tMy meta\n'
 
 @Then('I should get a data structure representing those metadata')
 def step_impl(context):
