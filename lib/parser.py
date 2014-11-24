@@ -1,8 +1,8 @@
 from functools import partial
 
-#Parse and serialize format, line by line. Use as library from other scripts
+#Parse and serialize format, line by line.
 
-#parse one line of conchord format, make sure to lint input first.
+#parse one line of conchord format.
 #Returns a tuple containing all parsing errors in the first element if any and the parsed
 #line in the second
 def parse(line):
@@ -110,5 +110,5 @@ def serialize(data):
 
     serialized = '\t'.join(map(lambda (item, serializer): serializer(item), zip(values, serializers)))
 
-    return ([], serialized)
+    return ([], serialized + '\n')
 
