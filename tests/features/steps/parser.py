@@ -167,7 +167,21 @@ def step_impl(context):
 @then('I should get a string representation of it')
 def step_impl(context):
     line = '\tA\tmy lyrics\n'
-    print(serialize(context.data))
+    assert(serialize(context.data)) == ([], line)
+
+@given('I serialize a valid line data structure with notes')
+def step_impl(context):
+    context.data = {
+            'lyrics': 'my lyrics',
+            'chord-name': 'A',
+            'notes': [1, 2, 3, None, None, None],
+            'fingerings': None,
+            'label': None
+        }
+
+@then('I should get a string representation of the notes')
+def step_impl(context):
+    line = '\tA\tmy lyrics\t123---\n'
     assert(serialize(context.data)) == ([], line)
 
 @given('I parse a valid line')

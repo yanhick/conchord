@@ -89,7 +89,6 @@ def endWithoutNewline(lineAsString, line):
 def serialize(data):
 
     default = lambda el: el if el != None else ''
-    serializeNotesOrFingerings = lambda item: ''.join(map(default, item) if item is not None else '')
     serializers = [
             default,
             default,
@@ -111,4 +110,11 @@ def serialize(data):
     serialized = '\t'.join(map(lambda (item, serializer): serializer(item), zip(values, serializers)))
 
     return ([], serialized + '\n')
+
+def serializeNotesOrFingerings(items):
+    if items is None:
+        return ''
+
+    notes = map(lambda item: str(item) if isinstance(item, int) else item, items)
+    return ''.join(map(lambda item: '-' if item == None else item, notes))
 
