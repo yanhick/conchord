@@ -51,6 +51,9 @@ Feature: Parsing and serializing conchord format
         Given I serialize a valid line data structure
         Then I should get a string representation of it
 
+        Given I serialize a valid line data structure with notes
+        Then I should get a string representation of the notes
+
     Scenario: Parsing and serializing
 
         Given I parse a valid line
